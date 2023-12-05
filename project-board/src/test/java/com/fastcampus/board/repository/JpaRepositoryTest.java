@@ -16,13 +16,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("JPA 연결 테스트")
 @Import(JpaConfig.class)
 @DataJpaTest
-class ArticleRepositoryTest {
+class JpaRepositoryTest {
 
     private final ArticleRepository articleRepository;
     @Autowired
     private ArticleCommentRepository articleCommentRepository;
 
-    ArticleRepositoryTest(
+    JpaRepositoryTest(
             @Autowired ArticleRepository articleRepository,
             @Autowired ArticleCommentRepository articleCommentRepository) {
         this.articleRepository = articleRepository;
