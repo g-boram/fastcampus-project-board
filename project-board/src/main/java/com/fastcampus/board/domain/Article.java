@@ -3,7 +3,6 @@ package com.fastcampus.board.domain;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.LinkedHashSet;
@@ -15,10 +14,9 @@ import java.util.Set;
 @Table(indexes = {
         @Index(columnList = "title"),
         @Index(columnList = "hashtag"),
-        @Index(columnList = "createAt"),
-        @Index(columnList = "createBy"),
+        @Index(columnList = "createdAt"),
+        @Index(columnList = "createdBy")
 })
-@EntityListeners(AuditingEntityListener.class)
 @Entity
 public class Article extends AuditingFields {
 
@@ -27,13 +25,13 @@ public class Article extends AuditingFields {
     private Long id;
 
 
-    @Setter @Column(nullable = false) private String title; //제목
-    @Setter @Column(nullable = false, length = 10000) private String content; //내용
+    @Setter @Column(nullable = false) private String title; // 제목
+    @Setter @Column(nullable = false, length = 10000) private String content; // 본문
 
-    @Setter private String hashtag; //해시태그
+    @Setter private String hashtag; // 해시태그
 
     @ToString.Exclude
-    @OrderBy("createdAt DESC")
+    @OrderBy("id")
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
     private final Set<ArticleComment> articleComments = new LinkedHashSet<>();
 
@@ -61,6 +59,6 @@ public class Article extends AuditingFields {
     public int hashCode() {
         return Objects.hash(id);
     }
-}
 
+}
 

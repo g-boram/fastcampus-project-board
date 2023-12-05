@@ -3,7 +3,6 @@ package com.fastcampus.board.domain;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -12,24 +11,23 @@ import java.util.Objects;
 @ToString
 @Table(indexes = {
         @Index(columnList = "content"),
-        @Index(columnList = "createAt"),
-        @Index(columnList = "createBy"),
+        @Index(columnList = "createdAt"),
+        @Index(columnList = "createdBy")
 })
-@EntityListeners(AuditingEntityListener.class)
 @Entity
-public class ArticleComment extends AuditingFields{
+public class ArticleComment extends AuditingFields {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Setter @ManyToOne(optional = false) private Article article;
-    @Setter @Column(nullable = false, length = 500) private String content;
+    @Setter @ManyToOne(optional = false) private Article article; // 게시글 (ID)
+    @Setter @Column(nullable = false, length = 500) private String content; // 본문
 
 
     protected ArticleComment() {}
 
-    public ArticleComment(Article article, String content) {
+    private ArticleComment(Article article, String content) {
         this.article = article;
         this.content = content;
     }
@@ -49,4 +47,5 @@ public class ArticleComment extends AuditingFields{
     public int hashCode() {
         return Objects.hash(id);
     }
+
 }
