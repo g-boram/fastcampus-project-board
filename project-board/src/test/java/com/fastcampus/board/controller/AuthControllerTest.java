@@ -1,6 +1,9 @@
 package com.fastcampus.board.controller;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> #18-service
 import com.fastcampus.board.config.SecurityConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,4 +40,8 @@ public class AuthControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML));
     }
 
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> #18-service
