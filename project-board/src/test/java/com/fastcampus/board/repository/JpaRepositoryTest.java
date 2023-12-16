@@ -2,12 +2,12 @@ package com.fastcampus.board.repository;
 
 import com.fastcampus.board.config.JpaConfig;
 import com.fastcampus.board.domain.Article;
+import com.fastcampus.board.domain.UserAccount;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-
 
 import java.util.List;
 
@@ -19,13 +19,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 class JpaRepositoryTest {
 
     private final ArticleRepository articleRepository;
-    @Autowired
-    private ArticleCommentRepository articleCommentRepository;
+    private final ArticleCommentRepository articleCommentRepository;
+    private final UserAccountRepository userAccountRepository;
 
-    JpaRepositoryTest(
+    public JpaRepositoryTest(
             @Autowired ArticleRepository articleRepository,
-            @Autowired ArticleCommentRepository articleCommentRepository) {
+            @Autowired ArticleCommentRepository articleCommentRepository,
+            @Autowired UserAccountRepository userAccountRepository
+    ) {
         this.articleRepository = articleRepository;
+        this.articleCommentRepository = articleCommentRepository;
+        this.userAccountRepository = userAccountRepository;
     }
 
     @DisplayName("select 테스트")
@@ -39,7 +43,7 @@ class JpaRepositoryTest {
         // Then
         assertThat(articles)
                 .isNotNull()
-                .hasSize(0); // classpath:resources/data.sql 참조
+                .hasSize(123);
     }
 
     @DisplayName("insert 테스트")
@@ -47,9 +51,8 @@ class JpaRepositoryTest {
     void givenTestData_whenInserting_thenWorksFine() {
         // Given
         long previousCount = articleRepository.count();
-//        UserAccount userAccount = userAccountRepository.save(UserAccount.of("newUno", "pw", null, null, null));
-        Article article = Article.of("new article", "new content", "#spring");
-//        article.addHashtags(Set.of(Hashtag.of("spring")));
+        UserAccount userAccount = userAccountRepository.save(UserAccount.of("uno", "pw", null, null, null));
+        Article article = Article.of(userAccount, "new article", "new content", "#spring");
 
         // When
         articleRepository.save(article);
@@ -70,9 +73,7 @@ class JpaRepositoryTest {
         Article savedArticle = articleRepository.saveAndFlush(article);
 
         // Then
-        assertThat(savedArticle)
-                .hasFieldOrPropertyWithValue("hashtag", updatedHashtag);
-
+        assertThat(savedArticle).hasFieldOrPropertyWithValue("hashtag", updatedHashtag);
     }
 
     @DisplayName("delete 테스트")
@@ -91,4 +92,5 @@ class JpaRepositoryTest {
         assertThat(articleRepository.count()).isEqualTo(previousArticleCount - 1);
         assertThat(articleCommentRepository.count()).isEqualTo(previousArticleCommentCount - deletedCommentsSize);
     }
+
 }
